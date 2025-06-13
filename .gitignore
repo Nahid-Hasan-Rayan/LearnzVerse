@@ -1,0 +1,33 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environment
+env/
+venv/
+ENV/
+.venv/
+
+# IDE or editor-specific
+.vscode/
+.idea/
+
+# Cache and database files
+*.db
+*.json
+
+# Exclude only specific app data files (optional alternative to *.json)
+# tutorverse_cache.json
+# config.json
+
+# System files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# OS-generated files
+ehthumbs.db
+Icon?
