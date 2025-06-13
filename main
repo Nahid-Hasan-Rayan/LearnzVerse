@@ -1,0 +1,330 @@
+#!/usr/bin/env python3
+"""
+TutorVerse - AI-Powered Learning Companion
+Copyright (c) 2025 Nahid Hasan Rayan
+
+Core Features:
+- Interactive STEM tutoring with 4 expert AI personas
+- Class-level personalized explanations
+- Session history tracking
+- Response caching for offline use
+- Progress analytics
+
+License: GPL-3.0 license
+"""
+
+import json
+import random
+import sqlite3
+from datetime import datetime
+from pathlib import Path
+
+# Configuration Constants
+APP_VERSION = "1.1.0"
+DB_FILE = "tutorverse.db"
+CACHE_FILE = "tutorverse_cache.json"
+CONFIG_FILE = "config.json"
+
+# AI Tutor Profiles
+TUTORS = {
+    "1": {
+        "subject": "Physics",
+        "name": "Mr. Newton",
+        "avatar": "⚛️",
+        "prompt": "Explain using real-world physics analogies. Focus on fundamental principles.",
+        "specialty": "Mechanics, Thermodynamics"
+    },
+    "2": {
+        "subject": "Chemistry",
+        "name": "Ms. Curie",
+        "avatar": "🧪", 
+        "prompt": "Focus on molecular interactions with practical examples.",
+        "specialty": "Atomic Structure, Reactions"
+    },
+    "3": {
+        "subject": "Biology",
+        "name": "Dr. Darwin",
+        "avatar": "🧬",
+        "prompt": "Use biological systems thinking with nature examples.",
+        "specialty": "Evolution, Ecology"
+    },
+    "4": {
+        "subject": "Math",
+        "name": "Prof. Euler",
+        "avatar": "🧮",
+        "prompt": "Break problems into logical steps with practice problems.",
+        "specialty": "Algebra, Calculus"
+    }
+}
+
+class DatabaseManager:
+    """Handles all database operations"""
+    def __init__(self):
+        self.conn = sqlite3.connect(DB_FILE)
+        self._init_db()
+    
+    def _init_db(self):
+        """Initialize database tables"""
+        cursor = self.conn.cursor()
+        
+        # Sessions table
+        cursor.execute("""
+        CREATE TABLE IF NOT EXISTS sessions (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            timestamp TEXT NOT NULL,
+            tutor TEXT NOT NULL,
+            subject TEXT NOT NULL,
+            class_level TEXT NOT NULL,
+            question TEXT NOT NULL,
+            response TEXT NOT NULL
+        )
+        """)
+        
+        # Progress table
+        cursor.execute("""
+        CREATE TABLE IF NOT EXISTS progress (
+            subject TEXT PRIMARY KEY,
+            sessions_count INTEGER DEFAULT 0,
+            last_accessed TEXT
+        )
+        """)
+        
+        self.conn.commit()
+    
+    def save_session(self, session_data):
+        """Save a tutoring session"""
+        cursor = self.conn.cursor()
+        
+        # Insert session
+        cursor.execute("""
+        INSERT INTO sessions (
+            timestamp, tutor, subject, class_level, question, response
+        ) VALUES (?, ?, ?, ?, ?, ?)
+        """, session_data)
+        
+        # Update progress
+        cursor.execute("""
+        INSERT OR REPLACE INTO progress (
+            subject, sessions_count, last_accessed
+        ) VALUES (
+            ?,
+            COALESCE((SELECT sessions_count FROM progress WHERE subject = ?), 0) + 1,
+            ?
+        )
+        """, (session_data[2], session_data[2], session_data[0]))
+        
+        self.conn.commit()
+    
+    def get_recent_sessions(self, limit=5):
+        """Retrieve recent sessions"""
+        cursor = self.conn.cursor()
+        cursor.execute("""
+        SELECT timestamp, tutor, question 
+        FROM sessions 
+        ORDER BY timestamp DESC 
+        LIMIT ?
+        """, (limit,))
+        return cursor.fetchall()
+    
+    def close(self):
+        """Close database connection"""
+        self.conn.close()
+
+class AITutorEngine:
+    """Handles AI response generation and caching"""
+    def __init__(self):
+        self.cache = self._load_cache()
+    
+    def _load_cache(self):
+        """Load response cache from file"""
+        try:
+            with open(CACHE_FILE, 'r') as f:
+                return json.load(f)
+        except (FileNotFoundError, json.JSONDecodeError):
+            return {}
+    
+    def _save_cache(self):
+        """Save cache to file"""
+        with open(CACHE_FILE, 'w') as f:
+            json.dump(self.cache, f)
+    
+    def generate_response(self, tutor, class_level, question):
+        """
+        Generate or retrieve cached AI response
+        
+        Args:
+            tutor: Selected tutor profile
+            class_level: User's education level
+            question: The question to answer
+            
+        Returns:
+            str: Generated response
+        """
+        cache_key = f"{tutor['name']}_{class_level}_{question[:50]}"
+        
+        # Check cache first
+        if cache_key in self.cache:
+            return self.cache[cache_key]
+        
+        # Generate new response (in production, replace with actual API call)
+        prompt = f"""
+        You are {tutor['name']}, a {tutor['subject']} tutor for grade {class_level} students.
+        Specialization: {tutor['specialty']}
+        
+        Student Question: {question}
+        
+        Please provide:
+        1. A 3-step explanation
+        2. One real-world example
+        3. A practice question
+        """
+        
+        response = f"""{tutor['avatar']} {tutor['name']}'s Answer:
+        
+1. Core Concept:
+- {tutor['subject']} principle explained simply
+        
+2. Step-by-Step:
+① First step...
+② Then...
+③ Finally...
+        
+3. Example:
+{random.choice(["Imagine this like...", "This works similar to..."])}
+        
+Try This:
+{random.choice(["Calculate...", "Explain what would happen if..."])}
+        """
+        
+        # Cache and return
+        self.cache[cache_key] = response
+        self._save_cache()
+        return response
+
+class TutorVerseApp:
+    """Main application class"""
+    def __init__(self):
+        self.db = DatabaseManager()
+        self.ai_engine = AITutorEngine()
+        self.config = self._load_config()
+    
+    def _load_config(self):
+        """Load user configuration"""
+        default_config = {
+            "last_class_level": "10",
+            "preferred_tutor": None,
+            "dark_mode": False
+        }
+        
+        try:
+            with open(CONFIG_FILE, 'r') as f:
+                return {**default_config, **json.load(f)}
+        except (FileNotFoundError, json.JSONDecodeError):
+            return default_config
+    
+    def _save_config(self):
+        """Save user configuration"""
+        with open(CONFIG_FILE, 'w') as f:
+            json.dump(self.config, f)
+    
+    def show_main_menu(self):
+        """Display the main menu interface"""
+        print(f"\n{' TutorVerse ':=^50}")
+        print(f"{' AI Learning Companion ':=^50}\n")
+        
+        print("🧑🏫 Available Tutors:")
+        for key, tutor in TUTORS.items():
+            print(f" {key}. {tutor['avatar']} {tutor['name']} ({tutor['subject']})")
+            print(f"    Specializes in: {tutor['specialty']}\n")
+        
+        print("\n📚 Menu Options:")
+        print(" 1-4 - Select tutor")
+        print(" H - View history")
+        print(" S - Settings")
+        print(" Q - Quit")
+    
+    def start_tutoring_session(self, tutor_key):
+        """Handle a tutoring session"""
+        tutor = TUTORS[tutor_key]
+        
+        # Get class level
+        class_level = input(
+            f"\nEnter your class level (current: {self.config['last_class_level']}): "
+        ) or self.config['last_class_level']
+        
+        self.config['last_class_level'] = class_level
+        self._save_config()
+        
+        # Q&A loop
+        while True:
+            question = input(
+                f"\n📝 {tutor['avatar']} Ask {tutor['name']} a {tutor['subject']} question "
+                f"(or 'back' to return):\n> "
+            ).strip()
+            
+            if question.lower() == 'back':
+                break
+            
+            if not question:
+                continue
+            
+            print(f"\n{tutor['avatar']} {tutor['name']} is thinking...")
+            
+            # Get AI response
+            response = self.ai_engine.generate_response(
+                tutor, class_level, question
+            )
+            
+            # Display response
+            print(f"\n{' RESPONSE ':=^50}")
+            print(response)
+            print("=" * 50)
+            
+            # Save session
+            self.db.save_session((
+                datetime.now().isoformat(),
+                tutor['name'],
+                tutor['subject'],
+                class_level,
+                question,
+                response
+            ))
+    
+    def show_history(self):
+        """Display session history"""
+        sessions = self.db.get_recent_sessions()
+        
+        print(f"\n{' SESSION HISTORY ':=^50}")
+        if not sessions:
+            print("\nNo sessions yet. Ask your first question!")
+            return
+        
+        for idx, (timestamp, tutor, question) in enumerate(sessions, 1):
+            print(f"\n{idx}. {tutor} on {timestamp[:10]}")
+            print(f"   Q: {question[:60]}{'...' if len(question) > 60 else ''}")
+    
+    def run(self):
+        """Main application loop"""
+        try:
+            while True:
+                self.show_main_menu()
+                choice = input("\nSelect an option: ").strip().lower()
+                
+                if choice in TUTORS:
+                    self.start_tutoring_session(choice)
+                elif choice == 'h':
+                    self.show_history()
+                elif choice == 's':
+                    print("\nSettings feature coming in v2.0!")
+                elif choice == 'q':
+                    print("\nThank you for using TutorVerse! Happy learning!")
+                    break
+                else:
+                    print("Invalid option. Please try again.")
+        finally:
+            self.db.close()
+
+if __name__ == "__main__":
+    print("🚀 Starting TutorVerse...")
+    app = TutorVerseApp()
+    app.run()
