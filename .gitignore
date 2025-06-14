@@ -18,7 +18,7 @@ ENV/
 *.json
 
 # Exclude only specific app data files (optional alternative to *.json)
-# tutorverse_cache.json
+# LearnzVerse_cache.json
 # config.json
 
 # System files
