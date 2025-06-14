@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-TutorVerse - AI-Powered Learning Companion
+LearnzVerse - AI-Powered Learning Companion
 Copyright (c) 2025 Nahid Hasan Rayan
 
 Core Features:
@@ -21,8 +21,8 @@ from pathlib import Path
 
 # Configuration Constants
 APP_VERSION = "1.1.0"
-DB_FILE = "tutorverse.db"
-CACHE_FILE = "tutorverse_cache.json"
+DB_FILE = "LearnzVerse.db"
+CACHE_FILE = "LearnzVerse_cache.json"
 CONFIG_FILE = "config.json"
 
 # AI Tutor Profiles
@@ -326,5 +326,5 @@ class TutorVerseApp:
 
 if __name__ == "__main__":
     print("🚀 Starting TutorVerse...")
-    app = TutorVerseApp()
+    app = LearnzVerseApp()
     app.run()
