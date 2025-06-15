@@ -317,7 +317,7 @@ class TutorVerseApp:
                 elif choice == 's':
                     print("\nSettings feature coming in v2.0!")
                 elif choice == 'q':
-                    print("\nThank you for using TutorVerse! Happy learning!")
+                    print("\nThank you for using LearnzVerse! Happy learning!")
                     break
                 else:
                     print("Invalid option. Please try again.")
