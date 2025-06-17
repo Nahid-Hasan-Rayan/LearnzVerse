@@ -1,0 +1,1470 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LearnzVerse - AI-Powered Homework Assistant</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            overflow: hidden;
+            height: 100vh;
+            color: white;
+        }
+
+        .page {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            transition: opacity 0.8s, transform 0.8s;
+        }
+
+        .hidden {
+            opacity: 0;
+            pointer-events: none;
+            transform: scale(0.9);
+        }
+
+        /* Background images */
+        .background-image {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: -1;
+            opacity: 0.5;
+        }
+
+        /* Landing Page Styles */
+        #landing-page {
+            background: linear-gradient(135deg, rgba(26, 42, 108, 0.6), rgba(205, 8, 182, 0.6), rgba(26, 42, 108, 0.6));
+        }
+
+        .landing-content {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 80px;
+            padding: 40px;
+            z-index: 1;
+            width: 90%;
+            max-width: 1400px;
+        }
+
+        .avatar-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .floating-logo {
+            width: 350px;
+            height: 350px;
+            animation: float 3s ease-in-out infinite;
+            filter: drop-shadow(0 5px 15px rgba(0, 0, 0, 0.5));
+        }
+
+        .description-section {
+            flex: 1;
+            max-width: 600px;
+        }
+
+        .description-section h1 {
+            color: white;
+            font-size: 3.5rem;
+            margin-bottom: 30px;
+            text-shadow: 0 0 15px rgba(255, 204, 0, 0.8);
+            text-align: left;
+        }
+
+        #typewriter-text {
+            color: #e0e0ff;
+            font-size: 1.6rem;
+            line-height: 1.8;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+            background: none;
+            padding: 0;
+            border: none;
+        }
+
+        .canon-container {
+            position: absolute;
+            bottom: 40px;
+            right: 60px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            cursor: pointer;
+            z-index: 10;
+            transition: transform 0.3s ease;
+        }
+
+        .canon-container:hover {
+            transform: translateY(-10px) scale(1.1);
+        }
+
+        .canon {
+            width: 140px;
+            filter: drop-shadow(0 0 15px rgba(255, 204, 0, 0.8));
+            transition: transform 0.3s;
+            transform: scaleX(-1);
+            /* Inverted canon */
+        }
+
+        .canon-container:hover .canon {
+            filter: drop-shadow(0 0 25px rgba(255, 204, 0, 0.9));
+        }
+
+        .click-me {
+            color: white;
+            font-weight: bold;
+            margin-top: 10px;
+            background: rgba(255, 0, 187, 0.4);
+            padding: 8px 20px;
+            border-radius: 25px;
+            animation: pulse 2s infinite;
+            font-size: 1.1rem;
+        }
+
+        .cannon-ball {
+            position: absolute;
+            width: 60px;
+            bottom: 80px;
+            right: 70px;
+            opacity: 0;
+            z-index: 5;
+        }
+
+        /* About Us Button */
+        .about-btn {
+            position: absolute;
+            top: 30px;
+            right: 30px;
+            padding: 12px 25px;
+            background: rgba(255, 204, 0, 0.3);
+            border: 2px solid rgba(255, 204, 0, 0.7);
+            border-radius: 30px;
+            color: white;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            z-index: 10;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            backdrop-filter: blur(5px);
+        }
+
+        .about-btn:hover {
+            background: rgba(255, 204, 0, 0.6);
+            transform: translateY(-3px);
+        }
+
+        /* About Us Page */
+        #about-page {
+            background: linear-gradient(135deg, rgba(26, 42, 108, 0.9), rgba(205, 8, 182, 0.9));
+        }
+
+        .about-content {
+            max-width: 800px;
+            padding: 40px;
+            text-align: center;
+            z-index: 1;
+        }
+
+        .about-content h1 {
+            font-size: 3rem;
+            color: #ffcc00;
+            margin-bottom: 30px;
+            text-shadow: 0 0 15px rgba(255, 204, 0, 0.8);
+        }
+
+        #about-text {
+            color: #e0e0ff;
+            font-size: 1.6rem;
+            line-height: 1.8;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+            margin-bottom: 30px;
+            text-align: left;
+        }
+
+        .back-to-home {
+            padding: 12px 25px;
+            background: rgba(255, 204, 0, 0.3);
+            border: 2px solid rgba(255, 204, 0, 0.7);
+            border-radius: 30px;
+            color: white;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            backdrop-filter: blur(5px);
+            margin: 0 auto;
+        }
+
+        .back-to-home:hover {
+            background: rgba(255, 204, 0, 0.6);
+            transform: translateY(-3px);
+        }
+
+        /* Tutors Page Styles */
+        #tutors-page {
+            background: linear-gradient(135deg, rgba(108, 26, 96, 0.8), rgba(154, 68, 139, 0.8), rgba(194, 9, 148, 0.8));
+        }
+
+        .welcome-message {
+            text-align: center;
+            margin-top: 20px;
+            margin-bottom: 30px;
+            z-index: 1;
+            padding: 0 20px;
+        }
+
+        .welcome-message h1 {
+            font-size: 3.5rem;
+            color: white;
+            margin-bottom: 15px;
+            text-shadow: 0 0 20px rgba(251, 0, 255, 0.8);
+        }
+
+        .welcome-message p {
+            color: #e0e0ff;
+            font-size: 1.6rem;
+            max-width: 900px;
+            margin: 0 auto 20px;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+            line-height: 1.6;
+        }
+
+        .selection-prompt {
+            color: #ffcc00;
+            font-size: 1.8rem;
+            margin-bottom: 30px;
+            text-shadow: 0 0 10px rgba(255, 204, 0, 0.6);
+            font-weight: bold;
+        }
+
+        .tutors-container {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 30px;
+            padding: 20px;
+            max-width: 1400px;
+            z-index: 1;
+            width: 100%;
+        }
+
+        .tutor-card {
+            background: transparent;
+            border-radius: 20px;
+            padding: 30px;
+            text-align: center;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            aspect-ratio: 0.9;
+            transition: all 0.5s ease;
+            opacity: 0;
+            transform: translateY(50px);
+        }
+
+        .tutor-card:hover {
+            transform: translateY(-10px) scale(1.05);
+        }
+
+        .tutor-card img {
+            width: 250px;
+            /* Increased size */
+            height: 250px;
+            /* Increased size */
+            object-fit: contain;
+            margin-bottom: 20px;
+            transition: all 0.5s ease;
+            filter: drop-shadow(0 5px 15px rgba(255, 0, 208, 0.6));
+            animation: float 4s ease-in-out infinite;
+        }
+
+        .tutor-card:hover img {
+            transform: scale(1.1);
+            filter: drop-shadow(0 10px 25px rgba(255, 0, 179, 0.8));
+            animation: spin 2s ease-in-out;
+            /* Added spin effect */
+        }
+
+        .tutor-card h3 {
+            color: #ffcc00;
+            font-size: 2.2rem;
+            margin-bottom: 10px;
+            text-shadow: 0 0 15px rgba(238, 0, 255, 0.8);
+            transition: all 0.3s ease;
+        }
+
+        .tutor-card:hover h3 {
+            color: #ffdd44;
+            text-shadow: 0 0 20px rgba(255, 221, 68, 0.9);
+        }
+
+        .tutor-card p {
+            color: #e0e0ff;
+            font-size: 1.4rem;
+            transition: all 0.3s ease;
+        }
+
+        .tutor-card:hover p {
+            color: white;
+        }
+
+        /* Chat Page Styles */
+        #chat-page {
+            background: linear-gradient(135deg, rgba(83, 13, 116, 0.9), rgba(152, 8, 143, 0.9), rgba(207, 10, 187, 0.9));
+        }
+
+        .chat-container {
+            display: flex;
+            width: 100%;
+            height: 100vh;
+            z-index: 1;
+        }
+
+        .tutor-section {
+            width: 30%;
+            background: rgba(15, 15, 35, 0.7);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            backdrop-filter: blur(10px);
+            border-right: 3px solid rgba(255, 204, 0, 0.5);
+            padding: 20px;
+        }
+
+        .tutor-avatar {
+            width: 80%;
+            max-width: 350px;
+            height: auto;
+            object-fit: contain;
+            margin-bottom: 20px;
+            filter: drop-shadow(0 0 30px rgba(255, 204, 0, 0.7));
+            animation: float 4s ease-in-out infinite;
+        }
+
+        .tutor-name {
+            font-size: 2.5rem;
+            color: #ffcc00;
+            margin-bottom: 10px;
+            text-shadow: 0 0 15px rgba(255, 204, 0, 0.8);
+        }
+
+        .tutor-subject {
+            font-size: 1.8rem;
+            color: #e0e0ff;
+            margin-bottom: 20px;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        .tutor-info {
+            font-size: 1.2rem;
+            color: #d0d0ff;
+            line-height: 1.6;
+            padding: 0 15px;
+            max-width: 100%;
+            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+        }
+
+        .chat-section {
+            width: 70%;
+            display: flex;
+            flex-direction: column;
+            padding: 30px;
+            background: rgba(56, 25, 60, 0.8);
+            backdrop-filter: blur(10px);
+        }
+
+        .chat-header {
+            padding-bottom: 20px;
+            border-bottom: 2px solid rgba(255, 204, 0, 0.5);
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .chat-header h2 {
+            font-size: 2.2rem;
+            color: #ffcc00;
+            text-shadow: 0 0 15px rgba(255, 204, 0, 0.7);
+        }
+
+        .chat-actions {
+            display: flex;
+            gap: 15px;
+        }
+
+        .chat-action-btn {
+            background: rgba(255, 204, 0, 0.2);
+            border: 1px solid rgba(255, 204, 0, 0.5);
+            color: white;
+            padding: 8px 15px;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .chat-action-btn:hover {
+            background: rgba(255, 204, 0, 0.4);
+            transform: translateY(-2px);
+        }
+
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding-right: 15px;
+            margin-bottom: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .message {
+            padding: 15px;
+            border-radius: 15px;
+            max-width: 80%;
+            animation: fadeIn 0.5s ease-out;
+            position: relative;
+            backdrop-filter: blur(5px);
+        }
+
+        .user-message {
+            background: rgba(225, 65, 214, 0.6);
+            margin-left: auto;
+            border-bottom-right-radius: 5px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .tutor-message {
+            background: rgba(144, 12, 45, 0.7);
+            margin-right: auto;
+            border-bottom-left-radius: 5px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .message-content {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+        }
+
+        .message-time {
+            font-size: 0.8rem;
+            color: #aaa;
+            text-align: right;
+            margin-top: 8px;
+        }
+
+        .rating-container {
+            display: flex;
+            justify-content: flex-end;
+            gap: 5px;
+            margin-top: 10px;
+        }
+
+        .rating-star {
+            color: #ccc;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .rating-star:hover,
+        .rating-star.active {
+            color: #ffcc00;
+            transform: scale(1.2);
+        }
+
+        .chat-input-container {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .chat-input {
+            flex: 1;
+            padding: 15px 20px;
+            border-radius: 30px;
+            border: none;
+            background: rgba(40, 40, 80, 0.8);
+            color: white;
+            font-size: 1.1rem;
+            border: 2px solid rgba(255, 204, 0, 0.4);
+            transition: all 0.3s;
+            backdrop-filter: blur(5px);
+        }
+
+        .chat-input:focus {
+            outline: none;
+            border-color: rgba(255, 204, 0, 0.8);
+            box-shadow: 0 0 20px rgba(255, 204, 0, 0.4);
+            background: rgba(50, 50, 90, 0.9);
+        }
+
+        .send-button {
+            width: 55px;
+            height: 55px;
+            border-radius: 50%;
+            border: none;
+            background: #ffcc00;
+            color: #1a2a6c;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .send-button:hover {
+            transform: scale(1.1);
+            background: #ffd84d;
+            box-shadow: 0 8px 25px rgba(255, 204, 0, 0.6);
+        }
+
+        .back-button {
+            position: absolute;
+            top: 30px;
+            left: 30px;
+            padding: 12px 25px;
+            background: rgba(255, 204, 0, 0.3);
+            border: 2px solid rgba(255, 204, 0, 0.7);
+            border-radius: 30px;
+            color: white;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            z-index: 10;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            backdrop-filter: blur(5px);
+        }
+
+        .back-button:hover {
+            background: rgba(255, 204, 0, 0.6);
+            transform: translateX(-5px);
+        }
+
+        .loading-dots {
+            display: inline-block;
+            position: relative;
+            width: 80px;
+            height: 20px;
+        }
+
+        .loading-dots div {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 15px;
+            height: 15px;
+            border-radius: 50%;
+            background: #ff00ae;
+            animation-timing-function: cubic-bezier(0, 1, 1, 0);
+        }
+
+        .loading-dots div:nth-child(1) {
+            left: 8px;
+            animation: loading-dots1 0.6s infinite;
+        }
+
+        .loading-dots div:nth-child(2) {
+            left: 8px;
+            animation: loading-dots2 0.6s infinite;
+        }
+
+        .loading-dots div:nth-child(3) {
+            left: 32px;
+            animation: loading-dots2 0.6s infinite;
+        }
+
+        .loading-dots div:nth-child(4) {
+            left: 56px;
+            animation: loading-dots3 0.6s infinite;
+        }
+
+        /* Animations */
+        @keyframes float {
+            0% {
+                transform: translateY(0px);
+            }
+
+            50% {
+                transform: translateY(-20px);
+            }
+
+            100% {
+                transform: translateY(0px);
+            }
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.1);
+            }
+
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        @keyframes shoot {
+            0% {
+                opacity: 1;
+                bottom: 80px;
+                right: 70px;
+                transform: scale(1);
+            }
+
+            50% {
+                bottom: 60vh;
+                right: 50%;
+                transform: translateX(50%) scale(1);
+            }
+
+            70% {
+                transform: translateX(50%) scale(1.5);
+            }
+
+            100% {
+                opacity: 1;
+                bottom: 50vh;
+                right: 50%;
+                transform: translateX(50%) scale(10);
+            }
+        }
+
+        @keyframes explode {
+            0% {
+                transform: scale(1);
+                opacity: 1;
+            }
+
+            100% {
+                transform: scale(1.5);
+                opacity: 0;
+            }
+        }
+
+        @keyframes teleport {
+            0% {
+                opacity: 0;
+                transform: translateY(50px) scale(0.5);
+                filter: blur(10px);
+            }
+
+            100% {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+                filter: blur(0);
+            }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes loading-dots1 {
+            0% {
+                transform: scale(0);
+            }
+
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        @keyframes loading-dots3 {
+            0% {
+                transform: scale(1);
+            }
+
+            100% {
+                transform: scale(0);
+            }
+        }
+
+        @keyframes loading-dots2 {
+            0% {
+                transform: translate(0, 0);
+            }
+
+            100% {
+                transform: translate(24px, 0);
+            }
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg) scale(1);
+            }
+
+            50% {
+                transform: rotate(180deg) scale(1.1);
+            }
+
+            100% {
+                transform: rotate(360deg) scale(1);
+            }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1400px) {
+            .tutors-container {
+                max-width: 1200px;
+                gap: 20px;
+            }
+
+            .tutor-card img {
+                width: 220px;
+                height: 220px;
+            }
+        }
+
+        @media (max-width: 1200px) {
+            .landing-content {
+                gap: 50px;
+            }
+
+            .floating-logo {
+                width: 300px;
+                height: 300px;
+            }
+
+            .description-section h1 {
+                font-size: 3rem;
+            }
+
+            .tutors-container {
+                max-width: 1000px;
+                gap: 25px;
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 900px) {
+            .landing-content {
+                flex-direction: column;
+                gap: 40px;
+            }
+
+            .description-section {
+                text-align: center;
+            }
+
+            .description-section h1 {
+                text-align: center;
+            }
+
+            .tutors-container {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 25px;
+                max-width: 600px;
+            }
+
+            .tutor-card {
+                padding: 25px;
+            }
+
+            .chat-container {
+                flex-direction: column;
+            }
+
+            .tutor-section,
+            .chat-section {
+                width: 100%;
+            }
+
+            .tutor-section {
+                height: 35vh;
+                border-right: none;
+                border-bottom: 3px solid rgba(255, 204, 0, 0.5);
+                padding: 15px;
+            }
+
+            .tutor-avatar {
+                width: 50%;
+                max-width: 200px;
+            }
+
+            .chat-section {
+                height: 65vh;
+                padding: 20px;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .welcome-message h1 {
+                font-size: 2.5rem;
+            }
+
+            .welcome-message p {
+                font-size: 1.2rem;
+            }
+
+            .selection-prompt {
+                font-size: 1.4rem;
+            }
+
+            .description-section h1 {
+                font-size: 2.5rem;
+            }
+
+            #typewriter-text {
+                font-size: 1.3rem;
+            }
+
+            .canon-container {
+                right: 20px;
+                bottom: 20px;
+            }
+
+            .canon {
+                width: 100px;
+            }
+
+            .tutors-container {
+                grid-template-columns: 1fr;
+                max-width: 350px;
+            }
+
+            .tutor-card h3 {
+                font-size: 1.8rem;
+            }
+
+            .tutor-card p {
+                font-size: 1.2rem;
+            }
+
+            .tutor-name {
+                font-size: 2rem;
+            }
+
+            .tutor-subject {
+                font-size: 1.5rem;
+            }
+
+            .chat-header h2 {
+                font-size: 1.8rem;
+            }
+
+            .message-content {
+                font-size: 1rem;
+            }
+
+            .chat-input {
+                padding: 12px 18px;
+                font-size: 1rem;
+            }
+
+            .send-button {
+                width: 50px;
+                height: 50px;
+                font-size: 1.1rem;
+            }
+        }
+
+        /* Custom scrollbar */
+        .chat-messages::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .chat-messages::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+        }
+
+        .chat-messages::-webkit-scrollbar-thumb {
+            background: rgba(255, 204, 0, 0.6);
+            border-radius: 4px;
+        }
+
+        .chat-messages::-webkit-scrollbar-thumb:hover {
+            background: rgba(255, 204, 0, 0.8);
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Landing Page -->
+    <div id="landing-page" class="page">
+        <img src="{{ url_for('static', filename='Images/Logo 1.png') }}" alt="LearnzVerse Background"
+            class="background-image">
+
+        <div class="landing-content">
+            <div class="avatar-section">
+                <img src="{{ url_for('static', filename='Images/first page logo.png') }}" alt="LearnzVerse"
+                    class="floating-logo">
+            </div>
+
+            <div class="description-section">
+                <h1>Welcome to <span style="color: #ffcc00;">LearnzVerse</span></h1>
+                <div id="typewriter-text"></div>
+            </div>
+        </div>
+
+        <div class="canon-container">
+            <img src="{{ url_for('static', filename='Images/canon.png') }}" alt="Canon" class="canon" id="canon">
+            <div class="click-me">Click Me</div>
+        </div>
+
+        <button class="about-btn" id="about-btn">
+            <i class="fas fa-info-circle"></i> About Us
+        </button>
+
+        <img src="{{ url_for('static', filename='Images/cannon_ball.png') }}" alt="Cannon Ball" class="cannon-ball"
+            id="cannon-ball">
+    </div>
+
+    <!-- About Us Page -->
+    <div id="about-page" class="page hidden">
+        <img src="{{ url_for('static', filename='Images/about us.jpg') }}" alt="About Us Background"
+            class="background-image">
+
+        <div class="about-content">
+            <h1>About <span style="color: #ffcc00;">LearnzVerse</span></h1>
+            <div id="about-text"></div>
+            <button class="back-to-home" id="back-to-home">
+                <i class="fas fa-home"></i> Back to Home
+            </button>
+        </div>
+    </div>
+
+    <!-- Tutors Selection Page -->
+    <div id="tutors-page" class="page hidden">
+        <img src="{{ url_for('static', filename='Images/Logo 2.png') }}" alt="LearnzVerse Background"
+            class="background-image">
+
+        <div class="welcome-message">
+            <h1>Welcome, <span style="color: #ffcc00;">Learner</span>!</h1>
+            <p>Select your AI tutor to begin your educational journey. Each tutor specializes in their subject and will
+                guide you through complex concepts with step-by-step explanations.</p>
+            <div class="selection-prompt">Please choose one tutor to continue</div>
+        </div>
+
+        <div class="tutors-container">
+            <div class="tutor-card" data-tutor="physics">
+                <img src="{{ url_for('static', filename='Images/physics_logo.png') }}" alt="Mr. Newton - Physics">
+                <h3>Mr. Newton</h3>
+                <p>Physics Expert</p>
+            </div>
+
+            <div class="tutor-card" data-tutor="chemistry">
+                <img src="{{ url_for('static', filename='Images/chemistry_logo.png') }}" alt="Madam Curie - Chemistry">
+                <h3>Madam Curie</h3>
+                <p>Chemistry Professor</p>
+            </div>
+
+            <div class="tutor-card" data-tutor="biology">
+                <img src="{{ url_for('static', filename='Images/biology_logo.png') }}" alt="Dr. Darwin - Biology">
+                <h3>Dr. Darwin</h3>
+                <p>Biology Specialist</p>
+            </div>
+
+            <div class="tutor-card" data-tutor="math">
+                <img src="{{ url_for('static', filename='Images/math_logo.png') }}" alt="Prof. Euler - Math">
+                <h3>Prof. Euler</h3>
+                <p>Mathematics Tutor</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Chat Page -->
+    <div id="chat-page" class="page hidden">
+        <img src="{{ url_for('static', filename='Images/logo 3.png') }}" alt="LearnzVerse Background"
+            class="background-image">
+
+        <button class="back-button" id="back-button">
+            <i class="fas fa-arrow-left"></i> Back to Tutors
+        </button>
+
+        <div class="chat-container">
+            <div class="tutor-section">
+                <img id="tutor-avatar" class="tutor-avatar" src="" alt="Tutor Avatar">
+                <h2 id="tutor-name" class="tutor-name"></h2>
+                <h3 id="tutor-subject" class="tutor-subject"></h3>
+                <p id="tutor-info" class="tutor-info"></p>
+            </div>
+
+            <div class="chat-section">
+                <div class="chat-header">
+                    <h2>Ask Your Question</h2>
+                    <div class="chat-actions">
+                        <button class="chat-action-btn" id="save-chat-btn">
+                            <i class="fas fa-save"></i> Save Chat
+                        </button>
+                        <button class="chat-action-btn" id="load-chat-btn">
+                            <i class="fas fa-history"></i> Load History
+                        </button>
+                    </div>
+                </div>
+
+                <div class="chat-messages" id="chat-messages">
+                    <div class="message tutor-message">
+                        <div class="message-content">Hello! I'm your AI tutor. Ask me anything about my subject, and
+                            I'll provide a detailed, step-by-step explanation to help you understand.</div>
+                        <div class="message-time">Just now</div>
+                    </div>
+                </div>
+
+                <div class="chat-input-container">
+                    <input type="text" class="chat-input" id="chat-input" placeholder="Type your question here...">
+                    <button class="send-button" id="send-button">
+                        <i class="fas fa-paper-plane"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // DOM Elements
+        const landingPage = document.getElementById('landing-page');
+        const aboutPage = document.getElementById('about-page');
+        const tutorsPage = document.getElementById('tutors-page');
+        const chatPage = document.getElementById('chat-page');
+        const canon = document.getElementById('canon');
+        const cannonBall = document.getElementById('cannon-ball');
+        const tutorCards = document.querySelectorAll('.tutor-card');
+        const backButton = document.getElementById('back-button');
+        const chatInput = document.getElementById('chat-input');
+        const sendButton = document.getElementById('send-button');
+        const chatMessages = document.getElementById('chat-messages');
+        const tutorAvatar = document.getElementById('tutor-avatar');
+        const tutorName = document.getElementById('tutor-name');
+        const tutorSubject = document.getElementById('tutor-subject');
+        const tutorInfo = document.getElementById('tutor-info');
+        const saveChatBtn = document.getElementById('save-chat-btn');
+        const loadChatBtn = document.getElementById('load-chat-btn');
+        const aboutBtn = document.getElementById('about-btn');
+        const backToHomeBtn = document.getElementById('back-to-home');
+        const aboutText = document.getElementById('about-text');
+
+        // Tutor data
+        const tutors = {
+            physics: {
+                name: "Mr. Newton",
+                subject: "Physics",
+                info: "Physics expert with a focus on classical mechanics and thermodynamics. Specializes in real-world applications and problem-solving strategies. Can explain concepts from Newton's laws to quantum mechanics.",
+                color: "#4A90E2",
+                avatar: "{{ url_for('static', filename='Images/physics_logo.png') }}",
+                chatHistory: []
+            },
+            chemistry: {
+                name: "Madam Curie",
+                subject: "Chemistry",
+                info: "Chemistry professor specializing in organic chemistry and chemical reactions. Provides clear explanations with laboratory applications. Expertise in balancing equations and reaction mechanisms.",
+                color: "#E91E63",
+                avatar: "{{ url_for('static', filename='Images/chemistry_logo.png') }}",
+                chatHistory: []
+            },
+            biology: {
+                name: "Dr. Darwin",
+                subject: "Biology",
+                info: "Biology expert focusing on evolution, genetics, and ecology. Explains complex biological systems with clear analogies. Specializes in cellular biology and human anatomy.",
+                color: "#4CAF50",
+                avatar: "{{ url_for('static', filename='Images/biology_logo.png') }}",
+                chatHistory: []
+            },
+            math: {
+                name: "Prof. Euler",
+                subject: "Mathematics",
+                info: "Mathematics tutor specializing in algebra, calculus, and geometry. Breaks down problems into understandable steps. Expertise in trigonometry, statistics, and advanced mathematical concepts.",
+                color: "#FF9800",
+                avatar: "{{ url_for('static', filename='Images/math_logo.png') }}",
+                chatHistory: []
+            }
+        };
+
+        // Current selected tutor
+        let selectedTutor = null;
+        let currentChatHistory = [];
+
+        // Initialize the application
+        function init() {
+            // Typewriter effect
+            setupTypewriter();
+
+            // Set up event listeners
+            setupEventListeners();
+        }
+
+        // Set up typewriter effect
+        function setupTypewriter() {
+            const textElement = document.getElementById('typewriter-text');
+            const text = "LearnzVerse is an AI-powered homework assistant designed to help students understand and complete assignments across core subjects. Featuring four virtual tutors, our app provides personalized, concept-based explanations tailored to your class level. Simply select a tutor, ask your question, and receive step-by-step guidance.";
+
+            let charIndex = 0;
+            let currentText = '';
+
+            function type() {
+                if (charIndex < text.length) {
+                    currentText += text.charAt(charIndex);
+                    textElement.textContent = currentText;
+                    charIndex++;
+                    setTimeout(type, 30);
+                } else {
+                    // Add blinking cursor
+                    textElement.innerHTML += '<span style="display:inline-block;width:8px;height:1.2em;background:#ffcc00;margin-left:3px;vertical-align:middle;animation: blink 1s infinite;"></span>';
+                }
+            }
+
+            setTimeout(type, 1000);
+        }
+
+        // Set up about us typewriter effect
+        function setupAboutTypewriter() {
+            const text = "Hi, I'm NHR — a tech lover and lifelong learner passionate about making education simple and fun. I started learnzVerse to help students like you explore new skills and reach your full potential with easy-to-use tools and resources.\n\nI believe everyone deserves access to great learning, and I'm here to create that space. When I'm not building projects or learning something new, I'm focused on helping others grow and succeed.\n\nWelcome to learnzVerse — let's learn and grow together!";
+
+            let charIndex = 0;
+            let currentText = '';
+
+            function type() {
+                if (charIndex < text.length) {
+                    currentText += text.charAt(charIndex);
+                    aboutText.textContent = currentText;
+                    charIndex++;
+                    setTimeout(type, 30);
+                } else {
+                    // Add blinking cursor
+                    aboutText.innerHTML += '<span style="display:inline-block;width:8px;height:1.2em;background:#ffcc00;margin-left:3px;vertical-align:middle;animation: blink 1s infinite;"></span>';
+                }
+            }
+
+            setTimeout(type, 500);
+        }
+
+        // Set up event listeners
+        function setupEventListeners() {
+            // Canon click event
+            canon.addEventListener('click', function () {
+                document.querySelector('.click-me').style.opacity = '0';
+                cannonBall.style.opacity = '1';
+                cannonBall.style.animation = 'shoot 1.5s forwards';
+
+                setTimeout(function () {
+                    landingPage.classList.add('hidden');
+                    tutorsPage.classList.remove('hidden');
+                    animateTutorCards();
+                }, 1500);
+            });
+
+            // About button click event
+            aboutBtn.addEventListener('click', function () {
+                landingPage.classList.add('hidden');
+                aboutPage.classList.remove('hidden');
+                setupAboutTypewriter();
+            });
+
+            // Back to home button
+            backToHomeBtn.addEventListener('click', function () {
+                aboutPage.classList.add('hidden');
+                landingPage.classList.remove('hidden');
+            });
+
+            // Tutor card selection
+            tutorCards.forEach(card => {
+                card.addEventListener('click', function () {
+                    selectedTutor = this.getAttribute('data-tutor');
+                    tutorsPage.classList.add('hidden');
+                    loadTutorChat();
+                    chatPage.classList.remove('hidden');
+
+                    // Load the specific tutor's chat history
+                    currentChatHistory = tutors[selectedTutor].chatHistory || [];
+
+                    // Clear chat messages and add initial tutor message
+                    chatMessages.innerHTML = '';
+                    addMessage("Hello! I'm your AI tutor. Ask me anything about my subject, and I'll provide a detailed, step-by-step explanation to help you understand.", 'tutor');
+                });
+            });
+
+            // Back button
+            backButton.addEventListener('click', function () {
+                chatPage.classList.add('hidden');
+                tutorsPage.classList.remove('hidden');
+            });
+
+            // Send message
+            sendButton.addEventListener('click', sendMessage);
+            chatInput.addEventListener('keypress', function (e) {
+                if (e.key === 'Enter') {
+                    sendMessage();
+                }
+            });
+
+            // Save chat button
+            saveChatBtn.addEventListener('click', saveChatHistory);
+
+            // Load chat button
+            loadChatBtn.addEventListener('click', loadChatHistory);
+        }
+
+        // Animate tutor cards
+        function animateTutorCards() {
+            tutorCards.forEach((card, index) => {
+                setTimeout(() => {
+                    card.style.opacity = '1';
+                    card.style.transform = 'translateY(0)';
+                }, 300 * index);
+
+                card.addEventListener('mouseenter', () => {
+                    card.style.transform = 'translateY(-15px)';
+                });
+
+                card.addEventListener('mouseleave', () => {
+                    card.style.transform = 'translateY(0)';
+                });
+            });
+        }
+
+        // Load tutor chat
+        function loadTutorChat() {
+            const tutor = tutors[selectedTutor];
+
+            tutorAvatar.src = tutor.avatar;
+            tutorName.textContent = tutor.name;
+            tutorSubject.textContent = tutor.subject;
+            tutorInfo.textContent = tutor.info;
+
+            // Set border color based on subject
+            document.querySelector('.tutor-avatar').style.borderColor = tutor.color;
+            document.querySelector('.tutor-section').style.borderRightColor = tutor.color;
+            document.querySelector('.chat-header').style.borderBottomColor = tutor.color;
+        }
+
+        // Send message to server and get response
+        async function sendMessage() {
+            const message = chatInput.value.trim();
+            if (!message) return;
+
+            // Add user message to chat and history
+            addMessage(message, 'user');
+            currentChatHistory.push({ role: "user", content: message });
+
+            // Clear input
+            chatInput.value = '';
+
+            // Show loading indicator
+            const loadingId = showLoadingIndicator();
+
+            try {
+                // Send message to server
+                const response = await fetch('/chat', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        tutor: selectedTutor,
+                        message: message,
+                        history: currentChatHistory
+                    })
+                });
+
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+
+                const data = await response.json();
+
+                // Add AI response to chat and history
+                addMessage(data.response, 'tutor', true);
+                currentChatHistory.push({ role: "assistant", content: data.response });
+
+                // Update the tutor's chat history
+                tutors[selectedTutor].chatHistory = currentChatHistory;
+            } catch (error) {
+                console.error('Error:', error);
+                addMessage("Sorry, I'm having trouble connecting to the server. Please try again later.", 'tutor');
+            } finally {
+                // Remove loading indicator
+                removeLoadingIndicator(loadingId);
+            }
+        }
+
+        // Show loading indicator
+        function showLoadingIndicator() {
+            const loadingId = 'loading-' + Date.now();
+            const loadingDiv = document.createElement('div');
+            loadingDiv.id = loadingId;
+            loadingDiv.classList.add('message', 'tutor-message');
+
+            const contentDiv = document.createElement('div');
+            contentDiv.classList.add('message-content');
+            contentDiv.innerHTML = '<div class="loading-dots"><div></div><div></div><div></div><div></div></div>';
+
+            loadingDiv.appendChild(contentDiv);
+            chatMessages.appendChild(loadingDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+
+            return loadingId;
+        }
+
+        // Remove loading indicator
+        function removeLoadingIndicator(id) {
+            const loadingElement = document.getElementById(id);
+            if (loadingElement) {
+                loadingElement.remove();
+            }
+        }
+
+        // Add message to chat
+        function addMessage(text, sender, showRating = false) {
+            const messageDiv = document.createElement('div');
+            messageDiv.classList.add('message');
+            messageDiv.classList.add(sender === 'user' ? 'user-message' : 'tutor-message');
+
+            const contentDiv = document.createElement('div');
+            contentDiv.classList.add('message-content');
+            contentDiv.textContent = text;
+
+            const timeDiv = document.createElement('div');
+            timeDiv.classList.add('message-time');
+            timeDiv.textContent = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+            messageDiv.appendChild(contentDiv);
+            messageDiv.appendChild(timeDiv);
+
+            if (showRating && sender === 'tutor') {
+                const ratingDiv = document.createElement('div');
+                ratingDiv.classList.add('rating-container');
+                ratingDiv.innerHTML = `
+                    <span>Rate this response:</span>
+                    <i class="fas fa-star rating-star" data-rating="1"></i>
+                    <i class="fas fa-star rating-star" data-rating="2"></i>
+                    <i class="fas fa-star rating-star" data-rating="3"></i>
+                    <i class="fas fa-star rating-star" data-rating="4"></i>
+                    <i class="fas fa-star rating-star" data-rating="5"></i>
+                `;
+                messageDiv.appendChild(ratingDiv);
+
+                // Add event listeners to rating stars
+                const stars = ratingDiv.querySelectorAll('.rating-star');
+                stars.forEach(star => {
+                    star.addEventListener('click', function () {
+                        const rating = parseInt(this.getAttribute('data-rating'));
+                        stars.forEach((s, index) => {
+                            if (index < rating) {
+                                s.classList.add('active');
+                            } else {
+                                s.classList.remove('active');
+                            }
+                        });
+                        // Here you could send the rating to your server if you want to track it
+                        console.log(`Rated response: ${rating} stars`);
+                    });
+                });
+            }
+
+            chatMessages.appendChild(messageDiv);
+
+            // Scroll to bottom
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        // Save chat history to local storage
+        function saveChatHistory() {
+            if (!selectedTutor) return;
+
+            const chatData = {
+                tutor: selectedTutor,
+                history: currentChatHistory,
+                timestamp: new Date().toISOString()
+            };
+
+            // Get existing saved chats or create new array
+            let savedChats = JSON.parse(localStorage.getItem('learnzverse_chats') || '[]');
+
+            // Add current chat
+            savedChats.push(chatData);
+
+            // Save back to local storage
+            localStorage.setItem('learnzverse_chats', JSON.stringify(savedChats));
+
+            // Show confirmation
+            alert('Chat history saved successfully!');
+        }
+
+        // Load chat history from local storage
+        function loadChatHistory() {
+            const savedChats = JSON.parse(localStorage.getItem('learnzverse_chats') || '[]');
+
+            if (savedChats.length === 0) {
+                alert('No saved chat history found.');
+                return;
+            }
+
+            // Filter chats for the current tutor
+            const tutorChats = savedChats.filter(chat => chat.tutor === selectedTutor);
+
+            if (tutorChats.length === 0) {
+                alert(`No saved chats found for ${tutors[selectedTutor].name}.`);
+                return;
+            }
+
+            // For simplicity, we'll load the most recent chat
+            const mostRecentChat = tutorChats[tutorChats.length - 1];
+
+            // Clear current chat
+            chatMessages.innerHTML = '';
+            currentChatHistory = mostRecentChat.history;
+
+            // Rebuild the chat from history
+            mostRecentChat.history.forEach(msg => {
+                if (msg.role === 'user') {
+                    addMessage(msg.content, 'user');
+                } else if (msg.role === 'assistant') {
+                    addMessage(msg.content, 'tutor');
+                }
+            });
+
+            // Add a message indicating loaded history
+            addMessage(`Chat history loaded from ${new Date(mostRecentChat.timestamp).toLocaleString()}`, 'tutor');
+        }
+
+        // Initialize the app
+        init();
+    </script>
+</body>
+
+</html>

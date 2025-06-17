@@ -1,0 +1,255 @@
+/* Global Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    overflow: hidden;
+    height: 100vh;
+    background: linear-gradient(135deg, #1a2a6c, #b21f1f, #1a2a6c);
+}
+
+.highlight {
+    color: #ffcc00;
+    font-weight: bold;
+}
+
+/* Landing Page Styles */
+.landing-page {
+    position: relative;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.background-logo {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 80%;
+    max-width: 800px;
+    opacity: 0.8;
+    z-index: -1;
+}
+
+.landing-content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 50px;
+    padding: 20px;
+    z-index: 1;
+    margin-bottom: 150px;
+}
+
+.floating-logo {
+    width: 300px;
+    height: 300px;
+    border-radius: 50%;
+    box-shadow: 0 0 30px rgba(255, 204, 0, 0.6);
+    animation: float 3s ease-in-out infinite;
+}
+
+.description-box {
+    background: rgba(25, 25, 60, 0.85);
+    padding: 30px;
+    border-radius: 20px;
+    width: 450px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(10px);
+    border: 2px solid rgba(255, 204, 0, 0.3);
+}
+
+.description-box h1 {
+    color: white;
+    font-size: 2.5rem;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+#typewriter-text {
+    color: #e0e0ff;
+    font-size: 1.3rem;
+    line-height: 1.6;
+    min-height: 200px;
+    padding: 15px;
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+    border-left: 4px solid #ffcc00;
+}
+
+.canon-container {
+    position: absolute;
+    bottom: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    cursor: pointer;
+    z-index: 10;
+    transition: transform 0.3s ease;
+}
+
+.canon-container:hover {
+    transform: translateY(-10px);
+}
+
+.canon {
+    width: 120px;
+    filter: drop-shadow(0 0 10px rgba(255, 204, 0, 0.7));
+}
+
+.click-me {
+    color: white;
+    font-weight: bold;
+    margin-top: 10px;
+    background: rgba(255, 204, 0, 0.3);
+    padding: 5px 15px;
+    border-radius: 20px;
+    animation: pulse 2s infinite;
+}
+
+.cannon-ball {
+    position: absolute;
+    width: 50px;
+    bottom: 70px;
+    left: 50%;
+    transform: translateX(-50%);
+    opacity: 0;
+    z-index: 5;
+}
+
+/* Tutors Page Styles */
+.tutors-page {
+    position: relative;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    overflow: hidden;
+}
+
+.welcome-message {
+    text-align: center;
+    margin-top: 80px;
+    margin-bottom: 60px;
+    z-index: 1;
+}
+
+.welcome-message h1 {
+    font-size: 3.5rem;
+    color: white;
+    margin-bottom: 15px;
+    text-shadow: 0 0 15px rgba(255, 204, 0, 0.7);
+}
+
+.welcome-message p {
+    color: #e0e0ff;
+    font-size: 1.4rem;
+}
+
+.tutors-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 40px;
+    padding: 20px;
+    max-width: 1200px;
+    z-index: 1;
+}
+
+.tutor-card {
+    background: rgba(25, 25, 60, 0.85);
+    border-radius: 20px;
+    padding: 25px;
+    text-align: center;
+    width: 250px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(10px);
+    border: 2px solid rgba(255, 204, 0, 0.3);
+    opacity: 0;
+    transform: translateY(50px);
+    transition: transform 0.5s, box-shadow 0.3s;
+}
+
+.tutor-card img {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-bottom: 20px;
+    border: 3px solid rgba(255, 204, 0, 0.5);
+    box-shadow: 0 0 20px rgba(255, 204, 0, 0.4);
+}
+
+.tutor-card h3 {
+    color: #ffcc00;
+    font-size: 1.8rem;
+    margin-bottom: 5px;
+}
+
+.tutor-card p {
+    color: #e0e0ff;
+    font-size: 1.2rem;
+}
+
+/* Animations */
+@keyframes float {
+    0% { transform: translateY(0px); }
+    50% { transform: translateY(-20px); }
+    100% { transform: translateY(0px); }
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+    100% { transform: scale(1); }
+}
+
+@keyframes shoot {
+    0% { 
+        opacity: 1; 
+        bottom: 70px; 
+        left: 50%;
+        transform: translateX(-50%) scale(1);
+    }
+    50% { 
+        bottom: 60vh; 
+        left: 50%;
+        transform: translateX(-50%) scale(1);
+    }
+    70% {
+        transform: translateX(-50%) scale(1.5);
+    }
+    100% { 
+        opacity: 1; 
+        bottom: 50vh; 
+        left: 50%;
+        transform: translateX(-50%) scale(10);
+    }
+}
+
+@keyframes explode {
+    0% { transform: scale(1); opacity: 1; }
+    100% { transform: scale(1.5); opacity: 0; }
+}
+
+/* Teleport Animation */
+@keyframes teleport {
+    0% { 
+        opacity: 0; 
+        transform: translateY(50px) scale(0.5); 
+        filter: blur(10px);
+    }
+    100% { 
+        opacity: 1; 
+        transform: translateY(0) scale(1); 
+        filter: blur(0);
+    }
+}
