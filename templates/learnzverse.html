@@ -154,8 +154,8 @@
             top: 30px;
             right: 30px;
             padding: 12px 25px;
-            background: rgba(255, 204, 0, 0.3);
-            border: 2px solid rgba(255, 204, 0, 0.7);
+            background: rgba(217, 0, 255, 0.3);
+            border: 2px solid rgba(255, 0, 221, 0.7);
             border-radius: 30px;
             color: white;
             font-size: 1.1rem;
@@ -174,9 +174,7 @@
         }
 
         /* About Us Page */
-        #about-page {
-            background: linear-gradient(135deg, rgba(26, 42, 108, 0.9), rgba(205, 8, 182, 0.9));
-        }
+
 
         .about-content {
             max-width: 800px;
@@ -190,6 +188,7 @@
             color: #ffcc00;
             margin-bottom: 30px;
             text-shadow: 0 0 15px rgba(255, 204, 0, 0.8);
+            animation: glow 2s ease-in-out infinite alternate;
         }
 
         #about-text {
@@ -203,8 +202,8 @@
 
         .back-to-home {
             padding: 12px 25px;
-            background: rgba(255, 204, 0, 0.3);
-            border: 2px solid rgba(255, 204, 0, 0.7);
+            background: rgba(255, 0, 136, 0.3);
+            border: 2px solid rgba(155, 33, 141, 0.7);
             border-radius: 30px;
             color: white;
             font-size: 1.1rem;
@@ -224,7 +223,7 @@
 
         /* Tutors Page Styles */
         #tutors-page {
-            background: linear-gradient(135deg, rgba(108, 26, 96, 0.8), rgba(154, 68, 139, 0.8), rgba(194, 9, 148, 0.8));
+            background: linear-gradient(135deg, rgba(147, 43, 131, 0.8), rgba(154, 68, 139, 0.8), rgba(194, 9, 148, 0.8));
         }
 
         .welcome-message {
@@ -262,17 +261,18 @@
         .tutors-container {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
-            gap: 30px;
+            gap: 20px;
             padding: 20px;
             max-width: 1400px;
             z-index: 1;
             width: 100%;
+            margin: 0 auto;
         }
 
         .tutor-card {
             background: transparent;
             border-radius: 20px;
-            padding: 30px;
+            padding: 20px;
             text-align: center;
             cursor: pointer;
             display: flex;
@@ -289,10 +289,8 @@
         }
 
         .tutor-card img {
-            width: 250px;
-            /* Increased size */
-            height: 250px;
-            /* Increased size */
+            width: 220px;
+            height: 220px;
             object-fit: contain;
             margin-bottom: 20px;
             transition: all 0.5s ease;
@@ -303,8 +301,6 @@
         .tutor-card:hover img {
             transform: scale(1.1);
             filter: drop-shadow(0 10px 25px rgba(255, 0, 179, 0.8));
-            animation: spin 2s ease-in-out;
-            /* Added spin effect */
         }
 
         .tutor-card h3 {
@@ -408,7 +404,7 @@
 
         .chat-header h2 {
             font-size: 2.2rem;
-            color: #ffcc00;
+            color: #ff00e1;
             text-shadow: 0 0 15px rgba(255, 204, 0, 0.7);
         }
 
@@ -418,8 +414,8 @@
         }
 
         .chat-action-btn {
-            background: rgba(255, 204, 0, 0.2);
-            border: 1px solid rgba(255, 204, 0, 0.5);
+            background: rgba(255, 0, 238, 0.2);
+            border: 1px solid rgba(255, 0, 191, 0.5);
             color: white;
             padding: 8px 15px;
             border-radius: 20px;
@@ -431,7 +427,7 @@
         }
 
         .chat-action-btn:hover {
-            background: rgba(255, 204, 0, 0.4);
+            background: rgba(255, 0, 238, 0.4);
             transform: translateY(-2px);
         }
 
@@ -455,14 +451,14 @@
         }
 
         .user-message {
-            background: rgba(225, 65, 214, 0.6);
+            background: rgba(143, 46, 137, 0.6);
             margin-left: auto;
             border-bottom-right-radius: 5px;
             border: 1px solid rgba(255, 255, 255, 0.2);
         }
 
         .tutor-message {
-            background: rgba(144, 12, 45, 0.7);
+            background: rgba(149, 5, 211, 0.7);
             margin-right: auto;
             border-bottom-left-radius: 5px;
             border: 1px solid rgba(255, 255, 255, 0.2);
@@ -496,7 +492,7 @@
 
         .rating-star:hover,
         .rating-star.active {
-            color: #ffcc00;
+            color: #00ffd9;
             transform: scale(1.2);
         }
 
@@ -511,7 +507,7 @@
             padding: 15px 20px;
             border-radius: 30px;
             border: none;
-            background: rgba(40, 40, 80, 0.8);
+            background: rgba(141, 48, 133, 0.8);
             color: white;
             font-size: 1.1rem;
             border: 2px solid rgba(255, 204, 0, 0.4);
@@ -521,8 +517,8 @@
 
         .chat-input:focus {
             outline: none;
-            border-color: rgba(255, 204, 0, 0.8);
-            box-shadow: 0 0 20px rgba(255, 204, 0, 0.4);
+            border-color: rgba(191, 0, 255, 0.8);
+            box-shadow: 0 0 20px rgba(255, 0, 234, 0.4);
             background: rgba(50, 50, 90, 0.9);
         }
 
@@ -531,7 +527,7 @@
             height: 55px;
             border-radius: 50%;
             border: none;
-            background: #ffcc00;
+            background: #ff00e6;
             color: #1a2a6c;
             font-size: 1.2rem;
             cursor: pointer;
@@ -544,7 +540,7 @@
 
         .send-button:hover {
             transform: scale(1.1);
-            background: #ffd84d;
+            background: #ff4dfc;
             box-shadow: 0 8px 25px rgba(255, 204, 0, 0.6);
         }
 
@@ -553,8 +549,8 @@
             top: 30px;
             left: 30px;
             padding: 12px 25px;
-            background: rgba(255, 204, 0, 0.3);
-            border: 2px solid rgba(255, 204, 0, 0.7);
+            background: rgba(255, 0, 230, 0.3);
+            border: 2px solid rgba(212, 0, 255, 0.7);
             border-radius: 30px;
             color: white;
             font-size: 1.1rem;
@@ -733,17 +729,13 @@
             }
         }
 
-        @keyframes spin {
-            0% {
-                transform: rotate(0deg) scale(1);
+        @keyframes glow {
+            from {
+                text-shadow: 0 0 10px #ff0000, 0 0 20px #ff0000, 0 0 30px #ff0000, 0 0 40px #ffcc00;
             }
 
-            50% {
-                transform: rotate(180deg) scale(1.1);
-            }
-
-            100% {
-                transform: rotate(360deg) scale(1);
+            to {
+                text-shadow: 0 0 15px #ff0000, 0 0 25px #ff0000, 0 0 35px #ff0000, 0 0 45px #ffcc00;
             }
         }
 
@@ -755,8 +747,8 @@
             }
 
             .tutor-card img {
-                width: 220px;
-                height: 220px;
+                width: 200px;
+                height: 200px;
             }
         }
 
@@ -776,7 +768,7 @@
 
             .tutors-container {
                 max-width: 1000px;
-                gap: 25px;
+                gap: 20px;
                 grid-template-columns: repeat(2, 1fr);
             }
         }
@@ -797,12 +789,12 @@
 
             .tutors-container {
                 grid-template-columns: repeat(2, 1fr);
-                gap: 25px;
+                gap: 20px;
                 max-width: 600px;
             }
 
             .tutor-card {
-                padding: 25px;
+                padding: 20px;
             }
 
             .chat-container {
